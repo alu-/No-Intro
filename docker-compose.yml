@@ -1,0 +1,53 @@
+version: '3'
+services:
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - db
+    working_dir: /var/www
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ".:/var/www/"
+      - "./public:/var/www/html"
+    networks:
+      - no-intro-network
+
+  db:
+    image: mysql:5.7.22
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: no-intro
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - no-intro-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+      UPLOAD_LIMIT: 2G
+    restart: unless-stopped
+    ports:
+      - 8080:80
+    networks:
+      - no-intro-network
+
+volumes:
+  db_data:
+
+networks:
+  no-intro-network:
+    driver: bridge
