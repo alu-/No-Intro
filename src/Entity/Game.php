@@ -7,10 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=GameRepository::class)
+ * @ORM\Table(indexes={@ORM\Index(columns={"name", "aliases"}, flags={"fulltext"})})
  * @UniqueEntity("giantbomb_guid")
  */
 class Game
@@ -25,16 +27,19 @@ class Game
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups({"api"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"api"})
      */
     private $aliases;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"api"})
      */
     private $description;
 
@@ -46,6 +51,7 @@ class Game
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"api"})
      */
     private $original_release_date;
 
