@@ -21,6 +21,7 @@ class Game
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"api"})
      */
     private $id;
 

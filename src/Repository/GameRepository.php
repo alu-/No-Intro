@@ -19,13 +19,16 @@ class GameRepository extends ServiceEntityRepository
         parent::__construct($registry, Game::class);
     }
 
-    public function search(string $value): ?array
+    /**
+     * @return Game[]
+     */
+    public function search(string $value): array
     {
         return $this->createQueryBuilder('g')
                     ->addSelect('')
-                    ->setParameter('val', $value)
-                    ->where('MATCH(g.name, g.aliases) AGAINST(:val) > 0')
-                    ->orderBy('MATCH(g.name, g.aliases) AGAINST(:val)', 'DESC')
+                    ->setParameter('value', $value)
+                    ->where('MATCH(g.name, g.aliases) AGAINST(:value) > 0')
+                    ->orderBy('MATCH(g.name, g.aliases) AGAINST(:value)', 'DESC')
                     ->setMaxResults(50)
                     ->getQuery()
                     ->getResult();
